@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ณัฐพงศ์ ขาวนุ้ย - Official Portfolio</title>
+    
+    <!-- Google Fonts: Sarabun & Playfair Display -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Sarabun:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        gold: {
+                            100: '#F9F1D8',
+                            200: '#F0DEAA',
+                            300: '#E6CB7D',
+                            400: '#DDB753',
+                            500: '#D4AF37', // Classic Gold
+                            600: '#AA8C2C',
+                            700: '#806921',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Sarabun', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #FAFAFA;
+            overflow-x: hidden;
+        }
+        
+        /* Gold Gradient Text */
+        .text-gold-gradient {
+            background: linear-gradient(to right, #AA8C2C, #D4AF37, #AA8C2C);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        /* Gold Gradient Background */
+        .bg-gold-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #F0DEAA 50%, #D4AF37 100%);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #D4AF37; 
+            border-radius: 4px;
+        }
+
+        /* 3D Carousel Animation */
+        .carousel-container {
+            perspective: 1000px;
+            overflow: hidden;
+        }
+        .carousel-inner {
+            display: flex;
+            gap: 20px;
+            padding: 20px 0;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            scrollbar-width: none; /* Firefox */
+        }
+        .carousel-inner::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+        .carousel-card {
+            flex: 0 0 300px;
+            scroll-snap-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .carousel-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        /* Glassmorphism */
+        .glass {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Page Transitions */
+        .page-section {
+            display: none; /* Hidden by default */
+            min-height: 100vh;
+            padding-top: 80px; /* Offset for fixed navbar */
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+
+        .page-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Active Menu Item */
+        .nav-link.active {
+            color: #D4AF37;
+            position: relative;
+        }
+        .nav-link.active::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #D4AF37;
+        }
+    </style>
+</head>
+<body class="text-gray-700 antialiased flex flex-col min-h-screen">
+
+    <!-- Navbar -->
+    <nav class="fixed w-full z-50 glass shadow-sm transition-all duration-300" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <a href="#home" class="flex-shrink-0 flex items-center gap-2 group">
+                    <div class="w-10 h-10 rounded-full bg-gold-gradient flex items-center justify-center text-white font-serif font-bold text-xl shadow-md group-hover:scale-110 transition duration-300">
+                        N
+                    </div>
+                    <span class="font-serif font-bold text-2xl text-gray-800 tracking-wide group-hover:text-gold-600 transition">Nattapong<span class="text-gold-500">.K</span></span>
+                </a>
+                
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-6 items-center">
+                    <a href="#home" class="nav-link text-gray-600 hover:text-gold-500 font-medium transition">หน้าหลัก</a>
+                    <a href="#portfolio" class="nav-link text-gray-600 hover:text-gold-500 font-medium transition">แฟ้มสะสมงาน</a>
+                    <a href="#works" class="nav-link text-gray-600 hover:text-gold-500 font-medium transition">ผลงาน</a>
+                    <a href="#activities" class="nav-link text-gray-600 hover:text-gold-500 font-medium transition">กิจกรรม</a>
+                    <a href="#websites" class="nav-link text-gray-600 hover:text-gold-500 font-medium transition">เว็บไซต์</a>
+                    
+                    <div id="authContainer" class="ml-2">
+                        <button id="loginBtnNav" onclick="openLoginModal()" class="px-5 py-2 rounded-full border border-gold-400 text-gold-600 hover:bg-gold-500 hover:text-white transition shadow-sm text-sm">
+                            เข้าสู่ระบบ
+                        </button>
+                        <div id="userProfile" class="hidden flex items-center gap-3">
+                            <span class="text-sm font-medium text-gold-600 bg-gold-50 px-3 py-1 rounded-full border border-gold-100" id="userEmailDisplay"></span>
+                            <button onclick="handleLogout()" class="text-gray-400 hover:text-red-500 transition" title="ออกจากระบบ">
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button onclick="toggleMobileMenu()" class="text-gray-600 hover:text-gold-500 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" onclick="toggleMobileMenu()" class="nav-link-mobile block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50">หน้าหลัก</a>
+                <a href="#portfolio" onclick="toggleMobileMenu()" class="nav-link-mobile block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50">แฟ้มสะสมงาน</a>
+                <a href="#works" onclick="toggleMobileMenu()" class="nav-link-mobile block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50">ผลงาน</a>
+                <a href="#activities" onclick="toggleMobileMenu()" class="nav-link-mobile block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50">กิจกรรม</a>
+                <a href="#websites" onclick="toggleMobileMenu()" class="nav-link-mobile block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-gold-500 hover:bg-gold-50">เว็บไซต์</a>
+                <div class="pt-2 border-t border-gray-100 mt-2">
+                    <button onclick="openLoginModal()" id="mobileLoginBtn" class="w-full text-left block px-3 py-2 rounded-md text-base font-medium text-gold-600 hover:bg-gold-50">เข้าสู่ระบบ</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow bg-gray-50 relative">
+
+        <!-- 1. HOME PAGE -->
+        <section id="home" class="page-section">
+            <div class="min-h-[85vh] flex flex-col justify-center relative overflow-hidden pt-32 md:pt-40"> <!-- Added padding top here -->
+                <!-- Decoration -->
+                <div class="absolute top-20 right-[-10%] w-96 h-96 bg-gold-200 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob"></div>
+                <div class="absolute bottom-20 left-[-10%] w-96 h-96 bg-yellow-100 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-blob animation-delay-2000"></div>
+
+                <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+                    <div class="text-center mb-16">
+                        <h2 class="text-xl text-gold-600 font-semibold tracking-widest uppercase mb-4 animate-fade-in-up mt-10">Portfolio</h2>
+                        <h1 class="text-5xl md:text-7xl font-serif font-bold text-gray-900 mb-6">
+                            ณัฐพงศ์ <span class="text-gold-gradient">ขาวนุ้ย</span>
+                        </h1>
+                        <p class="mt-4 max-w-2xl mx-auto text-xl text-gray-500 font-light leading-relaxed">
+                            สร้างสรรค์ผลงานด้วยความตั้งใจ มุ่งมั่นพัฒนาเทคโนโลยีและนวัตกรรม<br>
+                            ยินดีต้อนรับสู่พื้นที่แสดงผลงานของผม
+                        </p>
+                        <div class="mt-10 flex justify-center gap-4">
+                            <a href="#portfolio" class="px-8 py-3 rounded-full bg-gold-gradient text-white font-medium shadow-lg hover:shadow-gold-300/50 hover:scale-105 transition transform">แฟ้มสะสมงาน</a>
+                            <a href="#works" class="px-8 py-3 rounded-full bg-white border border-gray-200 text-gray-700 font-medium shadow-md hover:bg-gray-50 transition">ดูผลงาน</a>
+                        </div>
+                    </div>
+
+                    <!-- Featured Carousel -->
+                    <div class="mt-8">
+                        <div class="flex justify-between items-end mb-6 px-4 max-w-6xl mx-auto">
+                            <h3 class="text-2xl font-serif font-bold text-gray-800 border-l-4 border-gold-500 pl-3">ผลงานเด่น</h3>
+                            <div class="text-gold-500 text-sm animate-pulse hidden md:block">
+                                <i class="fas fa-arrows-left-right mr-1"></i> หมุนดูผลงาน
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-container px-4 pb-10">
+                            <div class="carousel-inner" id="featuredContainer">
+                                <!-- Items will be injected here via JS -->
+                                <div class="carousel-card bg-white rounded-2xl shadow-xl overflow-hidden h-[400px] flex flex-col relative group">
+                                    <div class="h-full w-full bg-gray-100 flex items-center justify-center">
+                                        <div class="loader"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PORTFOLIO PAGE (NEW) -->
+        <section id="portfolio" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="bg-white rounded-3xl shadow-sm p-8 md:p-12 mb-8 border border-gray-100">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <h2 class="text-4xl font-serif font-bold text-gray-900 mb-2">แฟ้มสะสมงาน</h2>
+                            <p class="text-gray-500">เอกสารและแฟ้มผลงานที่รวบรวมไว้ (Portfolio Files)</p>
+                        </div>
+                        <button onclick="openAddModal('portfolio')" class="admin-only hidden bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition transform hover:scale-105">
+                            <i class="fas fa-plus"></i> เพิ่มแฟ้มงาน
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolioContainer">
+                    <!-- Portfolio Items JS -->
+                    <div class="col-span-full flex justify-center py-20">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. WORKS PAGE -->
+        <section id="works" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="bg-white rounded-3xl shadow-sm p-8 md:p-12 mb-8 border border-gray-100">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <h2 class="text-4xl font-serif font-bold text-gray-900 mb-2">ผลงานทั้งหมด</h2>
+                            <p class="text-gray-500">รวบรวมผลงานที่ภาคภูมิใจและการพัฒนาทักษะ</p>
+                        </div>
+                        <button onclick="openAddModal('works')" class="admin-only hidden bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition transform hover:scale-105">
+                            <i class="fas fa-plus"></i> เพิ่มผลงานใหม่
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="worksContainer">
+                    <!-- Works Items JS -->
+                    <div class="col-span-full flex justify-center py-20">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. ACTIVITIES PAGE -->
+        <section id="activities" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="bg-white rounded-3xl shadow-sm p-8 md:p-12 mb-8 border border-gray-100">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <h2 class="text-4xl font-serif font-bold text-gray-900 mb-2">กิจกรรม</h2>
+                            <p class="text-gray-500">ภาพบรรยากาศการเข้าร่วมกิจกรรมต่างๆ และงานเพื่อสังคม</p>
+                        </div>
+                        <button onclick="openAddModal('activities')" class="admin-only hidden bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition transform hover:scale-105">
+                            <i class="fas fa-plus"></i> เพิ่มกิจกรรม
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="activitiesContainer">
+                     <!-- Activities Items JS -->
+                     <div class="col-span-full flex justify-center py-20">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. WEBSITES PAGE -->
+        <section id="websites" class="page-section">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+                <div class="bg-white rounded-3xl shadow-sm p-8 md:p-12 mb-8 border border-gray-100">
+                    <div class="flex flex-col md:flex-row justify-between items-center gap-6">
+                        <div>
+                            <h2 class="text-4xl font-serif font-bold text-gray-900 mb-2">เว็บไซต์</h2>
+                            <p class="text-gray-500">ผลงานการพัฒนาเว็บไซต์และแอปพลิเคชัน</p>
+                        </div>
+                        <button onclick="openAddModal('websites')" class="admin-only hidden bg-gold-500 hover:bg-gold-600 text-white px-6 py-3 rounded-full shadow-lg flex items-center gap-2 transition transform hover:scale-105">
+                            <i class="fas fa-plus"></i> เพิ่มเว็บไซต์
+                        </button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="websitesContainer">
+                     <!-- Website Items JS -->
+                     <div class="col-span-full flex justify-center py-20">
+                        <div class="loader"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12 border-t-4 border-gold-500 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="w-16 h-16 rounded-full bg-gold-500 text-white text-2xl font-bold flex items-center justify-center mx-auto mb-6 shadow-lg shadow-gold-500/30 font-serif">N</div>
+            <h2 class="text-2xl font-serif font-bold mb-4">Nattapong Khawnuy</h2>
+            <div class="flex justify-center space-x-6 mb-8">
+                <a href="#" class="text-gray-400 hover:text-gold-500 transition transform hover:scale-110"><i class="fab fa-facebook text-2xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-gold-500 transition transform hover:scale-110"><i class="fab fa-instagram text-2xl"></i></a>
+                <a href="#" class="text-gray-400 hover:text-gold-500 transition transform hover:scale-110"><i class="fab fa-github text-2xl"></i></a>
+                <a href="mailto:email@example.com" class="text-gray-400 hover:text-gold-500 transition transform hover:scale-110"><i class="fas fa-envelope text-2xl"></i></a>
+            </div>
+            <p class="text-gray-500 text-sm">
+                &copy; 2024 ณัฐพงศ์ ขาวนุ้ย. All Rights Reserved. <br>
+                <span class="text-xs text-gray-700 mt-2 block">Designed with Luxury & Simplicity</span>
+            </p>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="fixed inset-0 z-[60] hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-80 transition-opacity backdrop-blur-sm" aria-hidden="true" onclick="closeLoginModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-md w-full border border-gold-100">
+                <div class="bg-white px-8 py-8 relative">
+                    <button onclick="closeLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="text-center mb-6">
+                        <div class="w-12 h-12 bg-gold-100 rounded-full flex items-center justify-center mx-auto mb-4 text-gold-600">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <h3 class="text-2xl leading-6 font-serif font-bold text-gray-900" id="modal-title">Admin Login</h3>
+                        <p class="mt-2 text-sm text-gray-500">เข้าสู่ระบบเพื่อจัดการข้อมูลผลงาน</p>
+                    </div>
+                    <form id="loginForm" class="space-y-4">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                            <input type="email" id="email" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition" placeholder="name@example.com">
+                        </div>
+                        <div>
+                            <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                            <input type="password" id="password" required class="block w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-gold-500 focus:border-transparent transition" placeholder="••••••••">
+                        </div>
+                        <div id="loginError" class="text-red-500 text-sm text-center hidden bg-red-50 p-2 rounded-lg border border-red-100"></div>
+                        <button type="submit" class="w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-md text-sm font-medium text-white bg-gold-500 hover:bg-gold-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gold-500 transition transform active:scale-95">
+                            เข้าสู่ระบบ
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit/Add Item Modal -->
+    <div id="itemModal" class="fixed inset-0 z-[60] hidden overflow-y-auto">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-900 bg-opacity-80 backdrop-blur-sm" onclick="closeItemModal()"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-2xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg w-full">
+                <div class="bg-white px-8 py-8">
+                    <div class="flex justify-between items-center mb-6 border-b border-gray-100 pb-4">
+                        <h3 class="text-2xl font-serif font-bold text-gray-900" id="itemModalTitle">จัดการข้อมูล</h3>
+                        <button onclick="closeItemModal()" class="text-gray-400 hover:text-gray-600">
+                            <i class="fas fa-times text-xl"></i>
+                        </button>
+                    </div>
+                    
+                    <form id="itemForm" class="space-y-4">
+                        <input type="hidden" id="itemId">
+                        <input type="hidden" id="itemCollection">
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผลงาน</label>
+                            <input type="text" id="itemName" required class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gold-500 focus:border-gold-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">เกี่ยวกับ</label>
+                            <textarea id="itemAbout" rows="3" required class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gold-500 focus:border-gold-500 transition"></textarea>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ลิงก์รูปภาพ (URL)</label>
+                            <div class="flex gap-2">
+                                <input type="url" id="itemImage" placeholder="https://..." required class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gold-500 focus:border-gold-500 transition">
+                                <button type="button" onclick="previewImage()" class="px-3 py-2 bg-gray-100 rounded-lg text-gray-600 hover:bg-gray-200 text-sm">Preview</button>
+                            </div>
+                            <div id="imagePreview" class="mt-2 hidden h-32 w-full rounded-lg bg-gray-100 bg-cover bg-center"></div>
+                            <p class="text-xs text-gray-400 mt-1">*หากไม่ใส่รูป ระบบจะใช้รูปเริ่มต้นอัตโนมัติ</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">ลิงก์ผลงาน (URL)</label>
+                            <input type="url" id="itemLink" placeholder="https://..." class="block w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-gold-500 focus:border-gold-500 transition">
+                        </div>
+
+                        <div class="flex gap-3 pt-6">
+                            <button type="submit" class="flex-1 py-2.5 px-4 rounded-lg bg-gold-500 hover:bg-gold-600 text-white font-medium shadow-md transition">บันทึกข้อมูล</button>
+                            <button type="button" onclick="deleteItem()" id="deleteBtn" class="hidden px-4 py-2.5 rounded-lg bg-red-50 text-red-600 hover:bg-red-100 border border-red-200 font-medium transition">
+                                <i class="fas fa-trash-alt mr-1"></i> ลบ
+                            </button>
+                            <button type="button" onclick="closeItemModal()" class="px-4 py-2.5 rounded-lg border border-gray-300 text-gray-700 hover:bg-gray-50 font-medium transition">ยกเลิก</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK & Logic -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, doc, updateDoc, deleteDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- Configuration ---
+        const firebaseConfig = {
+            apiKey: "AIzaSyBIITFK5t9QIb_U7xOwwzvnZ4GqcooAyYI",
+            authDomain: "spt-form.firebaseapp.com",
+            projectId: "spt-form",
+            storageBucket: "spt-form.firebasestorage.app",
+            messagingSenderId: "137217678128",
+            appId: "1:137217678128:web:6f9aca15143a10708506f5",
+            measurementId: "G-1MHN9261KV"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+        
+        const APP_ID = 'nattapong-portfolio'; 
+        const getCollRef = (name) => collection(db, 'artifacts', APP_ID, 'public', 'data', name);
+
+        // State
+        let currentUser = null;
+        const DEFAULT_IMG = "https://n-nat-k.github.io/n.natt.k/img.png";
+
+        // --- Router Logic (SPA) ---
+        function handleRoute() {
+            const hash = window.location.hash || '#home';
+            const pageId = hash.substring(1); // remove #
+            
+            // Hide all pages
+            document.querySelectorAll('.page-section').forEach(page => {
+                page.classList.remove('active');
+            });
+
+            // Show current page
+            const activePage = document.getElementById(pageId) || document.getElementById('home');
+            activePage.classList.add('active');
+
+            // Update Navbar Active State
+            document.querySelectorAll('.nav-link, .nav-link-mobile').forEach(link => {
+                link.classList.remove('active', 'text-gold-500');
+                link.classList.add('text-gray-600');
+                if(link.getAttribute('href') === '#' + pageId) {
+                    link.classList.add('active', 'text-gold-500');
+                    link.classList.remove('text-gray-600');
+                }
+            });
+
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Listen for hash changes
+        window.addEventListener('hashchange', handleRoute);
+        // Initial load
+        window.addEventListener('DOMContentLoaded', handleRoute);
+
+
+        // --- Auth Logic ---
+        const loginForm = document.getElementById('loginForm');
+        
+        loginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('loginError');
+            const submitBtn = loginForm.querySelector('button[type="submit"]');
+
+            // Loading state
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> กำลังเข้าสู่ระบบ...';
+            submitBtn.disabled = true;
+
+            try {
+                await signInWithEmailAndPassword(auth, email, password);
+                closeLoginModal();
+                loginForm.reset();
+                errorDiv.classList.add('hidden');
+            } catch (error) {
+                errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> อีเมลหรือรหัสผ่านไม่ถูกต้อง<br><span class="text-xs">(${error.code})</span>`;
+                errorDiv.classList.remove('hidden');
+            } finally {
+                submitBtn.innerHTML = 'เข้าสู่ระบบ';
+                submitBtn.disabled = false;
+            }
+        });
+
+        window.handleLogout = async () => {
+            if(confirm('ต้องการออกจากระบบใช่หรือไม่?')) {
+                await signOut(auth);
+                // Optional: redirect to home
+                window.location.hash = '#home';
+            }
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            currentUser = user;
+            const adminElements = document.querySelectorAll('.admin-only');
+            const loginBtnNav = document.getElementById('loginBtnNav');
+            const userProfile = document.getElementById('userProfile');
+            const mobileLoginBtn = document.getElementById('mobileLoginBtn');
+
+            if (user) {
+                // Show Admin Controls
+                adminElements.forEach(el => el.classList.remove('hidden'));
+                loginBtnNav.classList.add('hidden');
+                userProfile.classList.remove('hidden');
+                document.getElementById('userEmailDisplay').textContent = user.email.split('@')[0];
+                mobileLoginBtn.textContent = "ออกจากระบบ (Admin)";
+                mobileLoginBtn.onclick = handleLogout;
+                mobileLoginBtn.classList.add('text-red-500');
+            } else {
+                // Hide Admin Controls
+                adminElements.forEach(el => el.classList.add('hidden'));
+                loginBtnNav.classList.remove('hidden');
+                userProfile.classList.add('hidden');
+                mobileLoginBtn.textContent = "เข้าสู่ระบบ";
+                mobileLoginBtn.onclick = openLoginModal;
+                mobileLoginBtn.classList.remove('text-red-500');
+            }
+        });
+
+        // --- Data Logic (Realtime) ---
+        
+        function setupRealtimeListener(collectionName, containerId, isFeatured = false) {
+            const container = document.getElementById(containerId);
+            
+            onSnapshot(getCollRef(collectionName), (snapshot) => {
+                const items = [];
+                snapshot.forEach(doc => {
+                    items.push({ id: doc.id, ...doc.data() });
+                });
+
+                // Clear Loader
+                container.innerHTML = '';
+
+                // Render
+                if (items.length === 0) {
+                     if(!isFeatured) container.innerHTML = `
+                        <div class="col-span-full flex flex-col items-center justify-center py-16 text-gray-400">
+                            <i class="fas fa-folder-open text-4xl mb-4 opacity-50"></i>
+                            <p>ยังไม่มีข้อมูลในส่วนนี้</p>
+                        </div>`;
+                     else container.innerHTML = `<div class="w-full text-center text-gray-400 py-10">ยังไม่มีผลงานเด่น</div>`;
+                     return;
+                }
+
+                // Sort by updatedAt descending if available (client side sort)
+                items.sort((a, b) => (b.updatedAt || '').localeCompare(a.updatedAt || ''));
+
+                items.forEach(item => {
+                    const card = isFeatured ? createFeaturedCard(item, collectionName) : createStandardCard(item, collectionName);
+                    container.appendChild(card);
+                });
+            }, (error) => {
+                console.error("Error fetching data:", error);
+                container.innerHTML = `<div class="col-span-full text-center p-4 bg-red-50 text-red-500 rounded-lg border border-red-100">
+                    <i class="fas fa-wifi-slash mb-2"></i><br>
+                    ไม่สามารถโหลดข้อมูลได้<br>
+                    <span class="text-xs text-gray-500">${error.message}</span>
+                </div>`;
+            });
+        }
+
+        // --- Components ---
+
+        function createStandardCard(item, collectionName) {
+            const div = document.createElement('div');
+            div.className = 'bg-white rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 overflow-hidden border border-gray-100 flex flex-col h-full group';
+            
+            // Image Area
+            const imgContainer = document.createElement('div');
+            imgContainer.className = 'h-56 overflow-hidden relative bg-gray-100';
+            
+            const img = document.createElement('img');
+            img.src = item.imageUrl || DEFAULT_IMG;
+            img.className = 'w-full h-full object-cover transition duration-700 group-hover:scale-110';
+            img.loading = 'lazy';
+            img.onerror = function() { this.src = DEFAULT_IMG; };
+            
+            // Overlay Actions
+            const overlay = document.createElement('div');
+            overlay.className = 'absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition duration-300 flex items-center justify-center gap-2';
+            
+            if(item.linkUrl) {
+                const linkBtn = document.createElement('a');
+                linkBtn.href = item.linkUrl;
+                linkBtn.target = "_blank";
+                linkBtn.className = 'w-10 h-10 rounded-full bg-white text-gray-900 flex items-center justify-center hover:bg-gold-500 hover:text-white transition shadow-lg transform translate-y-4 group-hover:translate-y-0';
+                linkBtn.innerHTML = '<i class="fas fa-link"></i>';
+                linkBtn.title = 'เยี่ยมชมผลงาน';
+                overlay.appendChild(linkBtn);
+            }
+
+            // Admin Edit Button on Overlay (for better UX)
+            const editBtnOverlay = document.createElement('button');
+            editBtnOverlay.className = 'w-10 h-10 rounded-full bg-white text-gold-600 flex items-center justify-center hover:bg-gold-500 hover:text-white transition shadow-lg transform translate-y-4 group-hover:translate-y-0 admin-only ' + (currentUser ? '' : 'hidden');
+            editBtnOverlay.innerHTML = '<i class="fas fa-pen"></i>';
+            editBtnOverlay.onclick = () => openEditModal(collectionName, item);
+            overlay.appendChild(editBtnOverlay);
+
+            imgContainer.appendChild(img);
+            imgContainer.appendChild(overlay);
+
+            // Content Area
+            const content = document.createElement('div');
+            content.className = 'p-6 flex-1 flex flex-col';
+            
+            const title = document.createElement('h3');
+            title.className = 'text-xl font-bold text-gray-800 mb-2 font-serif group-hover:text-gold-600 transition';
+            title.innerText = item.name;
+
+            const desc = document.createElement('p');
+            desc.className = 'text-gray-500 text-sm flex-1 leading-relaxed line-clamp-3 mb-4'; 
+            desc.innerText = item.about;
+
+            content.appendChild(title);
+            content.appendChild(desc);
+
+            div.appendChild(imgContainer);
+            div.appendChild(content);
+
+            return div;
+        }
+
+        function createFeaturedCard(item, collectionName) {
+            // Card for Carousel
+            const div = document.createElement('div');
+            div.className = 'carousel-card bg-white rounded-2xl shadow-xl overflow-hidden h-[400px] flex flex-col relative group flex-shrink-0 cursor-pointer';
+            div.style.width = '300px';
+            div.onclick = () => { if(item.linkUrl) window.open(item.linkUrl, '_blank'); };
+
+            const img = document.createElement('img');
+            img.src = item.imageUrl || DEFAULT_IMG;
+            img.className = 'w-full h-full object-cover absolute inset-0 transition duration-700 group-hover:scale-110';
+            img.loading = 'lazy';
+            img.onerror = function() { this.src = DEFAULT_IMG; };
+
+            const gradient = document.createElement('div');
+            gradient.className = 'absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-60 group-hover:opacity-80 transition';
+
+            const content = document.createElement('div');
+            content.className = 'absolute bottom-0 left-0 w-full p-6 text-white translate-y-2 group-hover:translate-y-0 transition duration-300';
+            
+            content.innerHTML = `
+                <div class="w-10 h-1 bg-gold-500 mb-3 rounded-full"></div>
+                <h3 class="text-xl font-bold font-serif mb-1 leading-tight">${item.name}</h3>
+                <p class="text-xs text-gray-300 line-clamp-2 mb-3 opacity-90">${item.about}</p>
+                <div class="flex items-center text-gold-400 text-xs font-bold tracking-wider uppercase">
+                    <span>View Project</span> <i class="fas fa-arrow-right ml-2 group-hover:translate-x-1 transition"></i>
+                </div>
+            `;
+
+            div.appendChild(img);
+            div.appendChild(gradient);
+            div.appendChild(content);
+
+            return div;
+        }
+
+        // --- Form Handling ---
+        
+        const itemForm = document.getElementById('itemForm');
+        
+        // Expose to window for HTML access
+        window.previewImage = () => {
+             const url = document.getElementById('itemImage').value;
+             const preview = document.getElementById('imagePreview');
+             if(url) {
+                 preview.style.backgroundImage = `url('${url}')`;
+                 preview.classList.remove('hidden');
+             } else {
+                 // Use default for preview if empty
+                 preview.style.backgroundImage = `url('${DEFAULT_IMG}')`;
+                 preview.classList.remove('hidden');
+             }
+        };
+
+        window.openAddModal = (collectionName) => {
+            document.getElementById('itemModal').classList.remove('hidden');
+            document.getElementById('itemModalTitle').textContent = 'เพิ่มข้อมูลใหม่';
+            document.getElementById('itemForm').reset();
+            document.getElementById('imagePreview').classList.add('hidden');
+            document.getElementById('itemCollection').value = collectionName;
+            document.getElementById('itemId').value = '';
+            document.getElementById('deleteBtn').classList.add('hidden');
+        };
+
+        window.openEditModal = (collectionName, item) => {
+            document.getElementById('itemModal').classList.remove('hidden');
+            document.getElementById('itemModalTitle').textContent = 'แก้ไขข้อมูล';
+            document.getElementById('itemCollection').value = collectionName;
+            document.getElementById('itemId').value = item.id;
+            
+            document.getElementById('itemName').value = item.name;
+            document.getElementById('itemAbout').value = item.about;
+            document.getElementById('itemImage').value = item.imageUrl;
+            document.getElementById('itemLink').value = item.linkUrl || '';
+            
+            window.previewImage(); // Show preview
+            document.getElementById('deleteBtn').classList.remove('hidden');
+        };
+
+        window.closeItemModal = () => {
+            document.getElementById('itemModal').classList.add('hidden');
+        };
+
+        itemForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const colName = document.getElementById('itemCollection').value;
+            const docId = document.getElementById('itemId').value;
+            const btn = itemForm.querySelector('button[type="submit"]');
+            
+            const imgInput = document.getElementById('itemImage').value;
+
+            const data = {
+                name: document.getElementById('itemName').value,
+                about: document.getElementById('itemAbout').value,
+                imageUrl: imgInput || DEFAULT_IMG,
+                linkUrl: document.getElementById('itemLink').value,
+                updatedAt: new Date().toISOString()
+            };
+
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> บันทึก...';
+
+            try {
+                if (docId) {
+                    await updateDoc(doc(getCollRef(colName), docId), data);
+                } else {
+                    await addDoc(getCollRef(colName), data);
+                }
+                closeItemModal();
+            } catch (error) {
+                alert("เกิดข้อผิดพลาด: " + error.message);
+            } finally {
+                btn.disabled = false;
+                btn.innerHTML = 'บันทึกข้อมูล';
+            }
+        });
+
+        window.deleteItem = async () => {
+            if(!confirm("⚠️ คุณแน่ใจหรือไม่ที่จะลบข้อมูลนี้?\nการกระทำนี้ไม่สามารถย้อนกลับได้")) return;
+            
+            const colName = document.getElementById('itemCollection').value;
+            const docId = document.getElementById('itemId').value;
+            const delBtn = document.getElementById('deleteBtn');
+
+            delBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ลบ...';
+
+            try {
+                await deleteDoc(doc(getCollRef(colName), docId));
+                closeItemModal();
+            } catch (error) {
+                alert("เกิดข้อผิดพลาดในการลบ: " + error.message);
+            } finally {
+                delBtn.innerHTML = '<i class="fas fa-trash-alt mr-1"></i> ลบ';
+            }
+        };
+
+        // --- Init ---
+        // Setup listeners for all sections
+        setupRealtimeListener('portfolio', 'portfolioContainer'); // New Portfolio Section
+        setupRealtimeListener('works', 'worksContainer');
+        setupRealtimeListener('activities', 'activitiesContainer');
+        setupRealtimeListener('websites', 'websitesContainer');
+        // Reuse 'works' for featured carousel
+        setupRealtimeListener('works', 'featuredContainer', true);
+
+    </script>
+
+    <!-- UI Interaction Scripts -->
+    <script>
+        // Modal Logic
+        function openLoginModal() {
+            document.getElementById('loginModal').classList.remove('hidden');
+        }
+
+        function closeLoginModal() {
+            document.getElementById('loginModal').classList.add('hidden');
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        // Close modals on escape key
+        document.onkeydown = function(evt) {
+            evt = evt || window.event;
+            if (evt.keyCode == 27) {
+                closeLoginModal();
+                closeItemModal();
+            }
+        };
+    </script>
+</body>
+</html>
+
+
